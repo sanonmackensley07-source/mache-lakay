@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mache Lakay - Finalize Kòmand</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/payment.css">
+    <script src="js/navbar.js"></script>
+    <!-- Librairi pou konvèti resi a an PDF pou telechaje -->
+    <script src="https://cloudflare.com"></script>
+</head>
+
+<body>
+
+    <section style="max-width: 600px; margin: 30px auto; padding: 0 15px;">
+        <h1>Finalize Kòmand</h1>
+
+        <!-- 🛒 Bwat Rezime Kòmand pou wè total la anvan peman -->
+        <div id="checkout-summary" style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ddd;">
+            <h3>Rezime Kòmand ou</h3>
+            <p>Total pou w peye: <b id="checkout-total">$0.00</b></p>
+        </div>
+
+        <form id="checkout-form">
+            <label style="display:block; margin-bottom:5px; font-weight:bold;">Non konplè</label>
+            <input type="text" id="customer-name" placeholder="Mete non ak siyen ou" required style="width: 100%; padding: 10px; margin-bottom: 15px; box-sizing: border-box;">
+
+            <label style="display:block; margin-bottom:5px; font-weight:bold;">Adrès Livrezon</label>
+            <input type="text" id="customer-address" placeholder="Kote pou n pote pwodwi a (Vil, lari, nimewo)" required style="width: 100%; padding: 10px; margin-bottom: 15px; box-sizing: border-box;">
+
+            <label style="display:block; margin-bottom:5px; font-weight:bold;">Nimewo Telefòn</label>
+            <input type="tel" id="customer-phone" placeholder="Eg: +509 3712-3456" required style="width: 100%; padding: 10px; margin-bottom: 15px; box-sizing: border-box;">
+
+            <h2>Metòd Peman</h2>
+            <select id="payment-method" style="width: 100%; padding: 10px; margin-bottom: 20px; font-size: 15px;">
+                <!-- Mache Lokal Ayiti -->
+                <option value="moncash">📱 MonCash (Ayiti)</option>
+                <option value="natcash">📱 NatCash (Ayiti)</option>
+                <option value="cod">💵 Cash on Delivery (Peye lè w resevwa l)</option>
+                <!-- Pou Dyaspora ak Moun lòtbò -->
+                <option value="stripe">💳 Kat Kredi (Stripe - Dyaspora)</option>
+                <option value="wise">✈️ Wise (Transfè Entènasyonal)</option>
+            </select>
+
+            <button type="submit" style="width: 100%; padding: 12px; background: #4caf50; color: white; border: none; font-size: 16px; font-weight: bold; border-radius: 5px; cursor: pointer;">
+                Konfime epi Peye kòmand lan
+            </button>
+        </form>
+    </section>
+
+    <script>
+        const API = "http://localhost:5000/api";
+    </script>
+    <script src="js/checkout.js"></script>
+</body>
+</html>

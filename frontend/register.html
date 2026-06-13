@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Mache Lakay</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/navbar.js"></script>
+</head>
+<body>
+
+    <div class="auth-box" style="max-width: 600px; margin: 30px auto; padding: 30px; background: #fff; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <h1 style="text-align: center; color: #2196f3; margin-bottom: 25px;">Kreye Kont Mache Lakay</h1>
+
+        <form id="register-form" enctype="multipart/form-data">
+            <!-- 👤 1. ENFÒMASYON SOU ADMINISTRATÈ BOUTIK LA -->
+            <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px; color: #555;">1. Enfòmasyon Pèsonèl</h3>
+            
+            <label style="font-weight:bold; display:block; margin: 10px 0 5px 0;">Non ak Siyen Pwopriyetè a</label>
+            <input type="text" id="name" placeholder="Eg: Jean Dupont" required style="width:100%; padding:10px; margin-bottom:12px; box-sizing:border-box;">
+            
+            <label style="font-weight:bold; display:block; margin-bottom:5px;">Email Pèsonèl / Biznis</label>
+            <input type="email" id="email" placeholder="Eg: direction@boutik.com" required style="width:100%; padding:10px; margin-bottom:12px; box-sizing:border-box;">
+            
+            <label style="font-weight:bold; display:block; margin-bottom:5px;">Modpas Aksè</label>
+            <input type="password" id="password" placeholder="Mete yon modpas solid" required style="width:100%; padding:10px; margin-bottom:15px; box-sizing:border-box;">
+
+            <label style="font-weight:bold; display:block; margin-bottom:5px; color: #2196f3;">Chwazi Wòl Ou:</label>
+            <select id="role" style="width:100%; padding:11px; margin-bottom:20px; font-weight: bold; border: 2px solid #2196f3; border-radius: 4px;">
+                <option value="customer">🛒 Kliyan (Mwen la pou m achte sèlman - Gratis)</option>
+                <option value="seller">🏪 Vandè Pwofesyonèl (Ouvè Boutik - Frè: 2,500 HTG)</option>
+            </select>
+
+            <!-- 🏪 2. ENFÒMASYON OPERASYONÈL AK LEGAL BOUTIK LA (Pou Vandè) -->
+            <div id="seller-info-box" style="display: none; background: #f5faff; border: 1px solid #90caf9; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+                <h3 style="margin-top:0; border-bottom: 1px solid #90caf9; padding-bottom: 5px; color: #1e88e5;">2. Enfòmasyon Legal & Operasyonèl</h3>
+                
+                <label style="font-weight:bold; display:block; margin: 10px 0 5px 0;">Non Komèsyal Boutik la</label>
+                <input type="text" id="shop-name" placeholder="Eg: Tech Lakay Electronics" style="width:100%; padding:10px; margin-bottom:12px; box-sizing:border-box;">
+                
+                <label style="font-weight:bold; display:block; margin-bottom:5px;">Adrès Fizik / Lokal Biznis la an Ayiti</label>
+                <input type="text" id="shop-address" placeholder="Eg: N° 12, Rue Panamericaine, Pétion-Ville" style="width:100%; padding:10px; margin-bottom:12px; box-sizing:border-box;">
+                
+                <label style="font-weight:bold; display:block; margin-bottom:5px;">Nimewo Telefòn Ofisyèl Boutik la (WhatsApp)</label>
+                <input type="tel" id="shop-phone" placeholder="Eg: +509 3123-4567" style="width:100%; padding:10px; margin-bottom:12px; box-sizing:border-box;">
+
+                <label style="font-weight:bold; display:block; margin-bottom:5px;">Nimewo NIF (Numéro d'Identité Fiscale)</label>
+                <input type="text" id="shop-nif" placeholder="Eg: 000-123-456-7" style="width:100%; padding:10px; margin-bottom:12px; box-sizing:border-box;">
+
+                <label style="font-weight:bold; display:block; margin-bottom:5px;">Nimewo CIN Pwopriyetè a oswa Patant Rejistre</label>
+                <input type="text" id="shop-cin" placeholder="Eg: 12-34-56-1990-00-00000" style="width:100%; padding:10px; margin-bottom:12px; box-sizing:border-box;">
+
+                <!-- 📂 Foto Dokiman pou Upload -->
+                <label style="font-weight:bold; display:block; margin-bottom:5px; color:#c62828;">Foto pyès Idantite (NIF / CIN / Patant) - PDF oswa Foto</label>
+                <input type="file" id="shop-document" accept="image/*,application/pdf" style="width:100%; padding:5px; margin-bottom:15px;">
+
+                <label style="font-weight:bold; display:block; margin-bottom:5px;">Kategori Pwodwi w ap vann</label>
+                <select id="shop-category" style="width:100%; padding:10px; margin-bottom:12px;">
+                    <option value="elektwonik">📱 Elektwonik & Telefòn</option>
+                    <option value="rad">👕 Rad & Mòd</option>
+                    <option value="manje">🍔 Manje & Pwodwi Agrikòl</option>
+                    <option value="kosmetik">💄 Bote & Swen Kò</option>
+                    <option value="lot">🏪 Lòt Kalite Biznis</option>
+                </select>
+
+                <!-- 💳 KIJAN VANDÈ A AP RESEVWA LAJAN L LÈ L VANN YON PWODWI -->
+                <h4 style="margin: 15px 0 5px 0; color: #1e88e5;">Kote pou n transfere kòb lavant ou (Paiement Vendeur):</h4>
+                <select id="seller-payout-method" style="width:100%; padding:10px; margin-bottom:12px;">
+                    <option value="moncash_business">📱 MonCash Business / Nimewo Pèsonèl</option>
+                    <option value="natcash_business">📱 NatCash Business / Nimewo Pèsonèl</option>
+                    <option value="bank_haiti">🏦 Transfè Bankè (Sogebank, Unibank, BUH...)</option>
+                </select>
+                <input type="text" id="seller-payout-details" placeholder="Mete Nimewo Kont ou oswa Nimewo Telefòn nan isit la" style="width:100%; padding:10px; box-sizing:border-box;">
+            </div>
+
+            <!-- 📱 3. PEMAN ENSRIPSYON VANDÈ (2 500 HTG) -->
+            <div id="seller-payment-box" style="display: none; background: #fff8e1; border: 1px solid #ffe082; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+                <h3 style="margin-top:0; border-bottom: 1px solid #ffe082; padding-bottom: 5px; color: #b78103;">3. Peman Enskripsyon Pwofesyonèl</h3>
+                <p style="margin: 5px 0 12px 0; font-size: 14px; color: #555;">
+                    Lè w klike sou bouton anba a, sistèm lan ap redirije w sou paj sekirize **MonCash** pou w peye frè aktivasyon <b>2,500 HTG</b> a pou kont ou ka kreye.
+                </p>
+                <div style="text-align: center; padding: 10px; background: #fff; border: 1px solid #ddd; font-weight: bold; color: #e65100; border-radius: 4px;">
+                    💰 Total pou w Peye: 2,500.00 HTG
+                </div>
+            </div>
+
+            <button type="submit" id="btn-submit-register" style="width:100%; padding:14px; background:#2196f3; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer; font-size:16px; margin-top:10px;">
+                Kreye Kont Gratis
+            </button>
+        </form>
+
+        <p style="text-align:center; margin-top:20px; font-size: 15px;">
+            <a href="login.html" style="color:#2196f3; text-decoration:none; font-weight: bold;">Deja gen kont? Konekte w</a>
+        </p>
+    </div>
+
+    <script>
+        const API = "http://localhost:5000/api";
+    </script>
+    <script src="js/register.js"></script>
+</body>
+</html>

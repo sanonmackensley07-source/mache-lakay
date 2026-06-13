@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Mache Lakay</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<script src="js/navbar.js"></script>
+<body>
+
+<nav class="navbar">
+    <h1>Admin Mache Lakay</h1>
+</nav>
+
+<section class="dashboard">
+
+    <h2>Kontwòl Sistèm</h2>
+
+    <div class="grid">
+
+        <div class="card" onclick="goTo('users')">
+            <h3>👥 Users</h3>
+            <p>Jere kliyan yo</p>
+        </div>
+
+        <div class="card" onclick="goTo('shops')">
+            <h3>🏪 Boutik</h3>
+            <p>Jere vandè yo</p>
+        </div>
+
+        <div class="card" onclick="goTo('products')">
+            <h3>📦 Pwodwi</h3>
+            <p>Valide pwodwi yo</p>
+        </div>
+
+        <div class="card" onclick="goTo('orders')">
+            <h3>🛒 Orders</h3>
+            <p>Swiv kòmand</p>
+        </div>
+
+    </div>
+
+</section>
+
+<script src="js/admin.js"></script>
+<script>
+const API = "http://localhost:5000/api";
+</script>
+<script src="js/api.js"></script>
+<script src="js/products.js"></script>
+
+</body>
+</html>

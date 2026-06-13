@@ -1,0 +1,27 @@
+.categories{
+
+    text-align:center;
+    padding:30px;
+
+}
+
+
+.categories button{
+
+    padding:12px 25px;
+
+    margin:8px;
+
+    background:white;
+
+    border-radius:20px;
+
+}
+
+
+
+.products-grid{
+
+    padding:40px;
+
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peman NatCash - Mache Lakay</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/navbar.js"></script>
+</head>
+<body style="background: #f4f4f4; font-family: Arial, sans-serif;">
+
+    <div class="payment-box" style="max-width: 500px; margin: 50px auto; padding: 30px; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-top: 5px solid #ff5500;">
+        <h1 style="text-align: center; color: #131921; margin-bottom: 5px;">📱 Peman NatCash</h1>
+        <p style="text-align: center; color: #666; font-size: 14px; margin-bottom: 25px;">Finalize tranzaksyon ou an sekirite ak Natcom</p>
+
+        <!-- Detay sou Kont NatCash Mache Lakay la -->
+        <div style="background: #fff5e6; border: 1px solid #ffcc80; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+            <h4 style="margin: 0 0 10px 0; color: #e65100;">👉 Enstriksyon Livrezon Kòb:</h4>
+            <p style="margin: 5px 0; font-size: 15px;">1. Voye kòb la sou kont NatCash sa a:<br>💼 <b>Nimewo Ajan / Telefòn:</b> <span style="color:#ff5500; font-weight:bold;">+509 4012-3456</span></p>
+            <p style="margin: 5px 0; font-size: 15px;">2. Sòm pou w voye a: <b id="natcash-amount" style="color:#d32f2f; font-size:18px;">2,500.00 HTG</b></p>
+        </div>
+
+        <!-- Fòm pou soumèt prèv la -->
+        <form id="natcash-form">
+            <label style="font-weight:bold; display:block; margin-bottom:5px; color:#131921;">Nimewo Telefòn Natcom ki voye kòb la</label>
+            <input type="tel" id="sender-phone" placeholder="Eg: 40123456" required style="width:100%; padding:11px; margin-bottom:15px; box-sizing:border-box; border:1px solid #ccc; border-radius:4px;">
+
+            <label style="font-weight:bold; display:block; margin-bottom:5px; color:#131921;">Kòd Tranzaksyon NatCash (TxID / Voucher)</label>
+            <input type="text" id="transaction-id" placeholder="Eg: NT12345678" required style="width:100%; padding:11px; margin-bottom:20px; box-sizing:border-box; border:1px solid #ccc; border-radius:4px; font-family: monospace; font-size:16px;">
+
+            <button type="submit" style="width:100%; padding:14px; background:#ff5500; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer; font-size:16px; transition: 0.3s;">
+                Konfime Peman NatCash Lan
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const API = "http://localhost:5000/api";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const type = urlParams.get('type');
+            const total = urlParams.get('total');
+            const amountText = document.getElementById("natcash-amount");
+
+            // Si se yon kòmand, montre total panyen an, si se enskripsyon l ap rete 2,500 HTG
+            if (type === "checkout" && total) {
+                amountText.innerText = `${parseFloat(total).toFixed(2)} USD / HTG`;
+            } else {
+                amountText.innerText = "2,500.00 HTG";
+            }
+
+            // Jere submit fòm nan
+            document.getElementById("natcash-form").addEventListener("submit", async (e) => {
+                e.preventDefault();
+                
+                const phone = document.getElementById("sender-phone").value;
+                const txId = document.getElementById("transaction-id").value;
+
+                try {
+                    const response = await fetch(`${API}/payments/natcash-confirm`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            phone,
+                            transactionId: txId,
+                            type: type || "registration",
+                            userId: localStorage.getItem("userId") || null
+                        })
+                    });
+
+                    if (!response.ok) throw new Error("Kòd NatCash sa a pa valid oswa li deja itilize.");
+
+                    alert("🎉 Peman soumèt! N ap verifye tranzaksyon NatCash N° " + txId + " la pou n aktive kont ou oubyen kòmand ou.");
+                    window.location.href = "index.html";
+
+                } catch (error) {
+                    alert("❌ Erè: " + error.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

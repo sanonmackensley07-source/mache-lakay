@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Depo Bankè - Mache Lakay</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/navbar.js"></script>
+    
+    <!-- 🎨 KÒD CSS ENTEGRE POU L PA DEPLASE DOSYE STYLE.CSS OU A -->
+    <style>
+        .bank-box {
+            max-width: 500px; margin: 40px auto; padding: 30px; 
+            background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+            border-top: 5px solid #ff9900; font-family: Arial, sans-serif;
+        }
+        .bank-info { background: #fff8e1; border: 1px solid #ffe082; padding: 15px; border-radius: 6px; margin-bottom: 20px; }
+        .bank-line { font-size: 15px; color: #333; margin: 5px 0; }
+        .bank-num { font-family: monospace; font-weight: bold; font-size: 16px; background: #fff; padding: 2px 6px; border-radius: 4px; border: 1px solid #ddd; }
+        .bank-box label { font-weight: bold; display: block; margin-bottom: 6px; color: #131921; }
+        .bank-box input, .bank-box select { width: 100%; padding: 11px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; }
+        .bank-box input:focus, .bank-box select:focus { border-color: #ff9900; outline: none; }
+        .bank-btn { width: 100%; padding: 14px; background: #ff9900; color: #131921; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .bank-btn:hover { background: #e68a00; transform: translateY(-1px); }
+    </style>
+</head>
+<body style="background: #f4f4f4;">
+
+    <div class="bank-box">
+        <h1 style="text-align: center; color: #131921; margin: 0 0 5px 0; font-size: 26px;">🏦 Depo / Transfè Bankè</h1>
+        <p style="text-align: center; color: #666; font-size: 14px; margin: 0 0 25px 0;">Sogemobile, Unibank Tout Kote oswa Depo dirèk</p>
+
+        <!-- Detay sou Kont Bankè Mache Lakay yo -->
+        <div class="bank-info">
+            <h4 style="margin: 0 0 10px 0; color: #b78103;">👉 Chwazi yon kont pou w voye kòb la:</h4>
+            
+            <div style="margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed #ddd;">
+                <p class="bank-line" style="font-weight: bold; color: #cc0000;">🔴 SOGEBANK (HTG / USD):</p>
+                <p class="bank-line"><b>Non Kont:</b> Mache Lakay S.A.</p>
+                <p class="bank-line"><b>Nimewo Kont:</b> <span class="bank-num">123-4567-890</span></p>
+            </div>
+
+            <div>
+                <p class="bank-line" style="font-weight: bold; color: #0066cc;">🔵 UNIBANK (HTG / USD):</p>
+                <p class="bank-line"><b>Non Kont:</b> Mache Lakay S.A.</p>
+                <p class="bank-line"><b>Nimewo Kont:</b> <span class="bank-num">987-6543-210</span></p>
+            </div>
+
+            <p style="margin: 15px 0 0 0; font-size: 15px; font-weight: bold; text-align: center; background: #fff; padding: 6px; border-radius: 4px; border: 1px solid #ddd;">
+                💰 Sòm pou w Voye: <span id="bank-amount" style="color:#d32f2f;">2,500.00 HTG</span>
+            </p>
+        </div>
+
+        <!-- Fòm pou soumèt prèv la -->
+        <form id="bank-form" enctype="multipart/form-data">
+            <label>Nan ki Bank ou fè transfè a?</label>
+            <select id="bank-name">
+                <option value="sogebank">Sogebank 🔴</option>
+                <option value="unibank">Unibank 🔵</option>
+            </select>
+
+            <label>Non konplè moun ki sou kont bankè a</label>
+            <input type="text" id="bank-sender-name" placeholder="Eg: Jean Dupont" required>
+
+            <label>Nimewo Tranzaksyon / Referans Transfè a</label>
+            <input type="text" id="bank-ref-id" placeholder="Eg: REF1029384" required style="font-family: monospace; text-transform: uppercase;">
+
+            <label>Uploade Foto Prèv la (Screenshot oswa Resi)</label>
+            <input type="file" id="bank-screenshot" accept="image/*" required style="background: #fafafa; border: 2px dashed #ccc; padding: 6px;">
+
+            <button type="submit" class="bank-btn">
+                Konfime Depo Bankè a
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const API = "http://localhost:5000/api";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const type = urlParams.get('type');
+            const total = urlParams.get('total');
+            const amountText = document.getElementById("bank-amount");
+
+            if (type === "checkout" && total) {
+                amountText.innerText = `$${parseFloat(total).toFixed(2)} USD / HTG`;
+            } else {
+                amountText.innerText = "2,500.00 HTG";
+            }
+
+            document.getElementById("bank-form").addEventListener("submit", async (e) => {
+                e.preventDefault();
+                
+                const bankName = document.getElementById("bank-name").value;
+                const senderName = document.getElementById("bank-sender-name").value;
+                const refId = document.getElementById("bank-ref-id").value;
+                const fileInput = document.getElementById("bank-screenshot");
+
+                const formData = new FormData();
+                formData.append("bankName", bankName);
+                formData.append("senderName", senderName);
+                formData.append("referenceId", refId);
+                formData.append("type", type || "registration");
+                formData.append("userId", localStorage.getItem("userId") || null);
+                
+                if (fileInput.files.length > 0) {
+                    formData.append("bankProof", fileInput.files[0]);
+                }
+
+                try {
+                    const response = await fetch(`${API}/payments/bank-confirm`, {
+                        method: "POST",
+                        body: formData
+                    });
+
+                    if (!response.ok) throw new Error("Erè: Sèvè a pa ka sove prèv sa a.");
+
+                    alert("🎉 Prèv Transfè " + bankName.toUpperCase() + " ou soumèt! Admin ap verifye referans N° " + refId + " la nan kèk minit pou aktive kont ou oswa kòmand ou.");
+                    window.location.href = "index.html";
+
+                } catch (error) {
+                    alert("❌ Erè: " + error.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

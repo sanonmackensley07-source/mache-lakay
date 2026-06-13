@@ -1,0 +1,29 @@
+.product-detail{
+
+    background:white;
+
+    display:flex;
+
+    gap:40px;
+
+    padding:50px;
+
+}
+
+
+.product-detail img{
+
+    width:400px;
+
+}
+
+
+#add-cart{
+
+    background:#ff9900;
+
+    padding:15px;
+
+    border:none;
+
+}

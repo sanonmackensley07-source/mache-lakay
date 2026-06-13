@@ -1,0 +1,121 @@
+/* =======================================================
+   📱 STYLES PAJ PEMAN MONCASH (STIL AMAZON / DIGICEL)
+======================================================= */
+
+/* Bwat Prensipal Peman an */
+.payment-box {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-top: 5px solid #ff9900; /* Jòn Amazon/MonCash */
+    font-family: Arial, sans-serif;
+}
+
+/* Tit Prensipal */
+.payment-box h1 {
+    text-align: center;
+    color: #131921; /* Nwa Amazon */
+    font-size: 26px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* Ti tèks anba tit la */
+.payment-box p {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+}
+
+/* Bwat Alèt Enstriksyon an (Jòn dou) */
+.payment-instructions {
+    background: #fff8e1;
+    border: 1px solid #ffe082;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.payment-instructions h4 {
+    margin: 0 0 10px 0;
+    color: #b78103;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.payment-instructions p {
+    text-align: left !important;
+    color: #333 !important;
+    font-size: 15px !important;
+    line-height: 1.6;
+}
+
+/* Label fòm yo */
+.payment-box label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+    color: #131921;
+    font-size: 14px;
+}
+
+/* Jaden Input yo (Nimewo ak Kòd) */
+.payment-box input[type="tel"],
+.payment-box input[type="text"] {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 18px;
+    box-sizing: border-box;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+/* Lè yon moun klike anndan Input yo */
+.payment-box input:focus {
+    border-color: #ff9900;
+    outline: none;
+    box-shadow: 0 0 5px rgba(255, 153, 0, 0.3);
+}
+
+/* Jaden espesyal pou Kòd Tranzaksyon an (Transaction ID) */
+#transaction-id {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 18px !important;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #131921;
+    text-align: center;
+}
+
+/* Bouton Jòn MonCash la */
+.payment-box button[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    background: #ff9900; /* Jòn/Oranj Digicel */
+    color: #131921; /* Tèks nwa pou l parèt klè */
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Lè moun nan pase sourit sou bouton an */
+.payment-box button[type="submit"]:hover {
+    background: #e68a00;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Lè yo klike sou bouton an */
+.payment-box button[type="submit"]:active {
+    transform: translateY(0);
+}

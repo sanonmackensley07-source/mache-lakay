@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peman Wise - Mache Lakay</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/navbar.js"></script>
+</head>
+<body style="background: #f4f4f4; font-family: Arial, sans-serif;">
+
+    <div class="payment-box" style="max-width: 500px; margin: 50px auto; padding: 30px; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-top: 5px solid #9fe870;">
+        <!-- 9fe870 se bèl bèl vèt flash konpayi Wise la -->
+        <h1 style="text-align: center; color: #131921; margin-bottom: 5px;">✈️ Peman Wise (Dyaspora)</h1>
+        <p style="text-align: center; color: #666; font-size: 14px; margin-bottom: 25px;">Ekselan pou moun k ap peye depi lòtbò dlo</p>
+
+        <!-- Detay sou kote pou yo voye kòb Wise la -->
+        <div style="background: #f4fbf0; border: 1px solid #9fe870; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+            <h4 style="margin: 0 0 10px 0; color: #2d6a4f;">👉 Detay pou Transfè Wise la:</h4>
+            <p style="margin: 5px 0; font-size: 15px;">1. Voye kòb la sou kont Wise sa a:<br>📧 <b>Email Wise Admin:</b> <span style="color:#131921; font-weight:bold;">machelakay.payment@gmail.com</span></p>
+            <p style="margin: 5px 0; font-size: 15px;">2. Sòm pou w voye a: <b id="wise-amount" style="color:#d32f2f; font-size:18px;">$20.00 USD / HTG</b></p>
+            <p style="margin: 10px 0 0 0; font-size: 13px; color: #555; font-style: italic;">(Remak: Si se pou kont Vandè, frè a ekivalan 2,500 HTG nan dat jodi a).</p>
+        </div>
+
+        <!-- Fòm pou soumèt prèv la -->
+        <form id="wise-form" enctype="multipart/form-data">
+            <label style="font-weight:bold; display:block; margin-bottom:5px; color:#131921;">Non konplè ki sou kont Wise ki voye kòb la</label>
+            <input type="text" id="wise-sender-name" placeholder="Eg: Mackensley Sanon" required style="width:100%; padding:11px; margin-bottom:15px; box-sizing:border-box; border:1px solid #ccc; border-radius:4px;">
+
+            <label style="font-weight:bold; display:block; margin-bottom:5px; color:#131921;">Uploade Foto Prèv Peman an (Screenshot Transfer)</label>
+            <input type="file" id="wise-screenshot" accept="image/*" required style="width:100%; padding:8px; margin-bottom:20px; box-sizing:border-box; border:1px solid #ccc; border-radius:4px; background: #fafafa;">
+
+            <button type="submit" style="width:100%; padding:14px; background:#9fe870; color:#131921; border:none; border-radius:5px; font-weight:bold; cursor:pointer; font-size:16px; transition: 0.3s;">
+                Konfime Peman Wise Lan
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const API = "http://localhost:5000/api";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const type = urlParams.get('type');
+            const total = urlParams.get('total');
+            const amountText = document.getElementById("wise-amount");
+
+            // Si se yon kòmand k ap peye, li montre total la, si se enskripsyon li mete $20 USD pa defo
+            if (type === "checkout" && total) {
+                amountText.innerText = `$${parseFloat(total).toFixed(2)} USD`;
+            } else {
+                amountText.innerText = "$20.00 USD (2,500 HTG)";
+            }
+
+            // Jere klike sou bouton konfime kòmand
+            document.getElementById("wise-form").addEventListener("submit", async (e) => {
+                e.preventDefault();
+                
+                const senderName = document.getElementById("wise-sender-name").value;
+                const fileInput = document.getElementById("wise-screenshot");
+
+                // Itilize FormData pou imaj prèv la ka pase bay backend la
+                const formData = new FormData();
+                formData.append("senderName", senderName);
+                formData.append("type", type || "registration");
+                formData.append("userId", localStorage.getItem("userId") || null);
+                
+                if (fileInput.files.length > 0) {
+                    formData.append("wiseProof", fileInput.files[0]);
+                }
+
+                try {
+                    const response = await fetch(`${API}/payments/wise-confirm`, {
+                        method: "POST",
+                        body: formData
+                    });
+
+                    if (!response.ok) throw new Error("Sèvè a rankontre yon pwoblèm pou sove prèv la.");
+
+                    alert("🎉 Prèv Wise ou soumèt avèk siksè! Admin ap verifye kont lan ak imel transfè a nan kèk minit pou aktive w.");
+                    window.location.href = "index.html";
+
+                } catch (error) {
+                    alert("❌ Erè: " + error.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

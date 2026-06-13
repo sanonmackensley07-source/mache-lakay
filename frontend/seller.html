@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard - Mache Lakay</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/seller.css">
+    <script src="js/navbar.js"></script>
+</head>
+
+<body>
+
+    <!-- NAVBAR VANDÈ -->
+    <nav style="display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: #1e88e5; color: white;">
+        <h1 style="margin: 0; font-size: 20px;">Mache Lakay Seller</h1>
+        <a href="#" id="btn-konsilte-boutik" style="color: white; text-decoration: none; font-weight: bold; background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 4px;">Konsilte Boutik</a>
+    </nav>
+
+    <!-- DASHBOARD CONTENU -->
+    <section class="dashboard" style="max-width: 1000px; margin: 30px auto; padding: 0 15px;">
+        <h2 style="color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px;">Dashboard Vandè 🏪</h2>
+
+        <div class="seller-grid" style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
+            <!-- CARD 1: PWODWI -->
+            <div class="card" style="flex: 1; min-width: 250px; background: white; padding: 20px; border: 1px solid #ddd; border-radius: 8px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <h3 style="margin-top:0; color:#1e88e5;">📦 Pwodwi pa w</h3>
+                <p id="total-products-count" style="font-size: 24px; font-weight: bold; margin: 10px 0;">0</p>
+                <button id="btn-open-modal" style="padding: 10px 20px; background: #1e88e5; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">+ Ajoute pwodwi</button>
+            </div>
+
+            <!-- CARD 2: KÒMAND -->
+            <div class="card" style="flex: 1; min-width: 250px; background: white; padding: 20px; border: 1px solid #ddd; border-radius: 8px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <h3 style="margin-top:0; color:#4caf50;">🛒 Kòmand Kliyan</h3>
+                <p id="total-orders-count" style="font-size: 24px; font-weight: bold; margin: 10px 0;">0</p>
+                <a href="orders.html" style="color: #4caf50; font-weight: bold; text-decoration: none;">Gade kòmand yo →</a>
+            </div>
+
+            <!-- CARD 3: LAVANT -->
+            <div class="card" style="flex: 1; min-width: 250px; background: white; padding: 20px; border: 1px solid #ddd; border-radius: 8px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <h3 style="margin-top:0; color:#ff9800;">💰 Lavant Total</h3>
+                <p id="total-sales-amount" style="font-size: 24px; font-weight: bold; margin: 10px 0; color:#e65100;">0.00 HTG</p>
+                <p style="font-size: 13px; color:#777; margin:0;">Kòb ki disponib pou transfè</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ➕ MODAL POP-UP POU AJOUTE NOUVO PWODWI -->
+    <div id="product-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; padding: 15px; box-sizing: border-box;">
+        <div style="background: white; padding: 25px; border-radius: 8px; max-width: 450px; width: 100%; box-shadow: 0 4px 15px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;">
+            <h3 style="margin-top:0; color:#1e88e5; border-bottom:1px solid #ddd; padding-bottom:5px;">Mete yon Pwodwi nan Mache a</h3>
+            
+            <form id="add-product-form">
+                <label style="font-weight:bold; display:block; margin: 10px 0 5px 0;">Non pwodwi a</label>
+                <input type="text" id="prod-name" placeholder="Eg: iPhone 14 Pro Max" required style="width:100%; padding:8px; box-sizing:border-box; margin-bottom:10px;">
+
+                <label style="font-weight:bold; display:block; margin-bottom:5px;">Pri ($ USD oswa HTG)</label>
+                <input type="number" id="prod-price" placeholder="Eg: 850" required style="width:100%; padding:8px; box-sizing:border-box; margin-bottom:10px;">
+
+                <label style="font-weight:bold; display:block; margin-bottom:5px;">Kategori</label>
+                <select id="prod-category" style="width:100%; padding:8px; margin-bottom:10px;">
+                    <option value="telefòn">📱 Telefòn & Tablèt</option>
+                    <option value="laptop">💻 Òdinatè & Laptop</option>
+                    <option value="desktop">🖥️ Desktop PC</option>
+                    <option value="gaming">🎮 Gaming</option>
+                    <option value="tv">📺 TV & Elektwonik</option>
+                    <option value="audio">🎧 Audio</option>
+                    <option value="kamera">📷 Kamera</option>
+                    <option value="mont">⌚ Mont & Smartwatch</option>
+                    <option value="rad gason">👕 Rad Gason</option>
+                    <option value="rad fanm">👗 Rad Fanm</option>
+                    <option value="rad timoun">👶 Rad Timoun</option>
+                    <option value="soulye">👟 Soulye</option>
+                    <option value="sak & valiz">👜 Sak & Valiz</option>
+                    <option value="bijou">💍 Bijou</option>
+                    <option value="linèt">🕶️ Linèt</option>
+                    <option value="bote">💄 Bote & Kosmetik</option>
+                    <option value="swen kò">🧴 Swen Kò</option>
+                    <option value="famasi">💊 Famasi</option>
+                    <option value="sante">🩺 Sante</option>
+                    <option value="kay">🏠 Kay & Mèb</option>
+                    <option value="chanm">🛏️ Chanm</option>
+                    <option value="salon">🛋️ Salon</option>
+                    <option value="kwizin">🍽️ Kwizin</option>
+                    <option value="twalèt">🚿 Twalèt</option>
+                    <option value="manje">🍔 Manje</option>
+                    <option value="bwason">🥤 Bwason</option>
+                    <option value="fwi & legim">🍎 Fwi & Legim</option>
+                    <option value="vyann">🥩 Vyann</option>
+                    <option value="pwason">🐟 Pwason</option>
+                    <option value="machin">🚗 Machin</option>
+                    <option value="moto">🏍️ Moto</option>
+                    <option value="bisiklèt">🚲 Bisiklèt</option>
+                    <option value="pyès machin">🔧 Pyès Machin</option>
+                    <option value="konstriksyon">🏗️ Konstriksyon</option>
+                    <option value="zouti">🔨 Zouti</option>
+                    <option value="elektrisite">⚡ Elektrisite</option>
+                    <option value="plonbri">🚰 Plonbri</option>
+                    <option value="jaden">🌱 Jaden</option>
+                    <option value="agrikilti">🌾 Agrikilti</option>
+                    <option value="elvaj">🐄 Elvaj</option>
+                    <option value="bèt lakay">🐓 Bèt Lakay</option>
+                    <option value="espò">⚽ Espò</option>
+                    <option value="fitness">🏋️ Fitness</option>
+                    <option value="baskètbòl">🏀 Baskètbòl</option>
+                    <option value="lapèch">🎣 Lapèch</option>
+                    <option value="liv">📚 Liv</option>
+                    <option value="lekòl">📝 Lekòl</option>
+                    <option value="atizay">🎨 Atizay</option>
+                    <option value="mizik">🎵 Mizik</option>
+                    <option value="kado">🎁 Kado</option>
+                    <option value="evènman">🎉 Evènman</option>
+                    <option value="otèl">🏨 Otèl</option>
+                    <option value="vwayaj">✈️ Vwayaj</option>
+                    <option value="biznis">💼 Biznis</option>
+                    <option value="sèvis dijital">📱 Sèvis Dijital</option>
+                    <option value="freelance">💻 Freelance</option>
+                    <option value="enpresyon">🖨️ Enpresyon</option>
+                </select>
+
+                <label style="font-weight:bold; display:block; margin-bottom:5px;">Deskripsyon pwodwi a</label>
+                <textarea id="prod-desc" placeholder="Deskripsyon otomatik ap mete isit la..." style="width:100%; padding:8px; box-sizing:border-box; margin-bottom:12px; height:120px; font-family: monospace; font-size: 13px;"></textarea>
+
+                <label style="font-weight:bold; display:block; margin-bottom:5px;">Lyen Foto Pwodwi a (URL oswa vid)</label>
+                <input type="text" id="prod-image-url" placeholder="Eg: assets/iphone.jpg" style="width:100%; padding:8px; box-sizing:border-box; margin-bottom:15px;">
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="button" id="btn-close-modal" style="padding: 8px 15px; background: #ccc; border: none; border-radius: 4px; cursor: pointer; font-weight:bold;">Anile</button>
+                    <button type="submit" style="padding: 8px 15px; background: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight:bold;">Pibliye Pwodwi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- KONFIGIRASYON API -->
+    <script>
+        const API = "http://localhost:5000/api";
+    </script>
+    <script src="js/seller.js"></script>
+</body>
+</html>

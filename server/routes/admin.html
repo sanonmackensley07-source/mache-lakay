@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mache Lakay - Dashboard Admin</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/navbar.js"></script>
+    <style>
+        .admin-section { max-width: 1100px; margin: 30px auto; padding: 0 15px; font-family: Arial, sans-serif; }
+        .stats-grid { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 30px; }
+        .stat-box { flex: 1; min-width: 200px; background: #131921; color: white; padding: 20px; border-radius: 8px; text-align: center; border-bottom: 4px solid #ff9900; }
+        .stat-box h3 { color: #ff9900; margin: 0 0 10px 0; font-size: 16px; }
+        .stat-box p { font-size: 26px; font-weight: bold; margin: 0; }
+        .seller-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .seller-table th { background: #131921; color: #ff9900; padding: 12px; text-align: left; }
+        .seller-table td { padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }
+        .btn-approve { background: #4caf50; color: white; padding: 6px 12px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        .btn-approve:hover { background: #43a047; }
+    </style>
+</head>
+<body style="background: #f4f6f9;">
+
+    <div class="admin-section">
+        <h1 style="color: #131921; border-bottom: 2px solid #ddd; padding-bottom: 10px; margin-bottom: 25px;">👑 Gwo Panel Administratè Mache Lakay</h1>
+
+        <!-- 📊 STATISTIK GLOBAL SIT LA -->
+        <div class="stats-grid">
+            <div class="stat-box"><h3>Moun Enskri</h3><p id="stat-users">0</p></div>
+            <div class="stat-box"><h3>Boutik Total</h3><p id="stat-sellers">0</p></div>
+            <div class="stat-box"><h3>Boutik Aktif</h3><p id="stat-active">0</p></div>
+            <div class="stat-box"><h3>Kòmand Pase</h3><p id="stat-orders">0</p></div>
+            <div class="stat-box"><h3>Chif d'Afè ($)</h3><p id="stat-revenue">$0.00</p></div>
+        </div>
+
+        <!-- 🏪 LIS VANDÈ K AP TANN APWOBASYON PEMAN -->
+        <h2>🏪 Vandè k ap tann Aktivasyon (Pending 2,500 HTG)</h2>
+        <table class="seller-table">
+            <thead>
+                <tr>
+                    <th>Boutik / Pwopriyetè</th>
+                    <th>NIF / CIN</th>
+                    <th>Telefòn / Rezo</th>
+                    <th>Kont Payout</th>
+                    <th>Aksyon</th>
+                </tr>
+            </thead>
+            <tbody id="pending-sellers-list">
+                <tr><td colspan="5" style="text-align:center; padding:20px; color:#777;">N ap chaje lis la... ⏳</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const API = "http://localhost:5000/api";
+
+        async function loadAdminDashboard() {
+            try {
+                // 1. Chaje Statistik Global yo
+                const resStats = await fetch(`${API}/admin/global-stats`);
+                const stats = await resStats.json();
+                document.getElementById("stat-users").innerText = stats.totalUsers;
+                document.getElementById("stat-sellers").innerText = stats.totalSellers;
+                document.getElementById("stat-active").innerText = stats.totalActiveSellers;
+                document.getElementById("stat-orders").innerText = stats.totalOrders;
+                document.getElementById("stat-revenue").innerText = `$${stats.totalRevenue.toFixed(2)}`;
+
+                // 2. Chaje lis Vandè k ap tann yo
+                const resSellers = await fetch(`${API}/admin/pending-sellers`);
+                const sellers = await resSellers.json();
+                const listContainer = document.getElementById("pending-sellers-list");
+
+                if (sellers.length === 0) {
+                    listContainer.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; font-weight:bold; color:#666;">Pa gen okenn demand aktivasyon an atant pou kounye a. 😎</td></tr>`;
+                    return;
+                }
+
+                listContainer.innerHTML = sellers.map(s => `
+                    <tr>
+                        <td><b>${s.sellerProfile.shopName || 'Boutik vid'}</b><br><span style="color:#666;">👤 ${s.name}</span></td>
+                        <td>NIF: ${s.sellerProfile.nif || 'Manke'}<br>CIN: ${s.sellerProfile.cin || 'Manke'}</td>
+                        <td>📞 ${s.sellerProfile.shopPhone || 'Manke'}<br><span style="text-transform:uppercase; color:#ff5500; font-weight:bold;">${s.paymentMethodChosen || 'moncash'}</span></td>
+                        <td>Rezo: <b>${s.sellerProfile.payoutMethod || 'Manke'}</b><br>Kont: <span>${s.sellerProfile.payoutDetails || 'Manke'}</span></td>
+                        <td><button class="btn-approve" onclick="approveVendor('${s._id}', '${s.sellerProfile.shopName}')">✔ Apwouve & Aktive</button></td>
+                    </tr>
+                `).join("");
+
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // Fonksyon pou aktive kont lan nan MongoDB lè w klike sou bouton an
+        async function approveVendor(userId, shopName) {
+            if (!confirm(`Èske ou verifye peman 2,500 HTG a tout bon epi w vle aktive boutik "${shopName}" la?`)) return;
+
+            try {
+                const response = await fetch(`${API}/admin/approve-seller`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ userId })
+                });
+
+                if (!response.ok) throw new Error("Sèvè a pa ka apwouve vandè sa a.");
+                
+                alert(`🎉 Siksè! Boutik "${shopName}" aktive nèt. Koulye a vandè a ka konekte nan Dashboard li.`);
+                loadAdminDashboard(); // Rafrechi paj la otomatikman
+
+            } catch (error) {
+                alert("❌ Erè: " + error.message);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadAdminDashboard);
+    </script>
+</body>
+</html>
