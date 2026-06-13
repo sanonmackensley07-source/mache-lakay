@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasyon Imel - Mache Lakay</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/navbar.js"></script>
+    
+    <!-- 🎨 KÒD CSS ENTEGRE POU PAJ LA RÈTE KOUT AK PWÒP -->
+    <style>
+        .otp-container {
+            max-width: 450px;
+            margin: 60px auto;
+            padding: 35px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-top: 5px solid #ff9900; /* Jòn Amazon */
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .otp-container h1 {
+            color: #131921;
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .otp-container p {
+            color: #555555;
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+        .otp-input-field {
+            width: 100%;
+            padding: 12px;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #cccccc;
+            border-radius: 6px;
+            background: #fafafa;
+            box-sizing: border-box;
+        }
+        .otp-input-field:focus {
+            border-color: #ff9900;
+            outline: none;
+            box-shadow: 0 0 5px rgba(255, 153, 0, 0.3);
+        }
+        .otp-submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: #ff9900;
+            color: #131921;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .otp-submit-btn:hover {
+            background: #e68a00;
+        }
+    </style>
+</head>
+<body style="background: #f4f4f4;">
+
+    <div class="otp-container">
+        <h1>🔑 Verifikasyon Sekirite</h1>
+        <p>Nou sot voye yon kòd sekrè <b>6 chif</b> sou Gmail ou. Tanpri tcheke bwat mesaj ou a epi antre kòd la anba a pou w aktive kont ou:</p>
+
+        <!-- Formulaire de soumission -->
+        <form id="otp-verification-form">
+            <input type="text" id="otp-code-input" maxlength="6" placeholder="000000" required class="otp-input-field">
+            <button type="submit" class="otp-submit-btn">Valide ak Konekte</button>
+        </form>
+    </div>
+
+    <script>
+        // 🚀 LYEN API VERCEL PA W LA KUNYA POU L TRÈY REYÈL
+        const API = "https://vercel.app";
+
+        document.getElementById("otp-verification-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            const code = document.getElementById("otp-code-input").value;
+            const userId = localStorage.getItem("pendingUserId"); // Rale ID nou te sove pandan enskripsyon an
+
+            if (!userId) {
+                alert("❌ Erè: Nou pa jwenn sesyon enskripsyon ou an. Tanpri refè enskripsyon an.");
+                window.location.href = "register.html";
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API}/auth/verify-otp`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ userId, code })
+                });
+
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.message || "Kòd la pa kòrèk!");
+
+                // 🌟 Sove vrè enfòmasyon sesyon yo nan localStorage kòm imel la verifye
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("userRole", data.role);
+                localStorage.setItem("userName", data.name);
+                localStorage.setItem("userId", data.userId);
+                localStorage.removeItem("pendingUserId"); // Netwaye ti ID sa a kounya
+
+                // Tcheke si moun nan se yon vandè pou voye l peye frè 2,500 HTG a
+                if (data.role === "seller") {
+                    alert("🎉 Imel verifye ak siksè! N ap redirije w sou paj Peman Vandè a kounye a.");
+                    window.location.href = "moncash-payment.html?type=registration";
+                } else {
+                    alert(`🎉 Bonjou ${data.name}! Kont ou aktive nèt. Byenveni sou boutik la!`);
+                    window.location.href = "shop.html";
+                }
+
+            } catch (error) {
+                alert("❌ Erè: " + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
